@@ -1,0 +1,72 @@
+<html>
+    <body>
+        <form onAdd="saveToLocalStorage(event)">
+            <label>Todo</label>
+            <input type="text" name="todo" />
+            <label>Description</label>
+            <input type="text" name="description" />
+            
+            <button aria-label='delete item'>X</button>
+            <button aria-label='add todo item'><span style='font-size: 20px;'>&#x2713</span></button>
+
+            
+
+        </form>
+        <ul id='listOfitems'></ul>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+        <script>
+            function saveToLocalStorage(event){
+                event.preventDefault();
+                const name = event.target.todo.value;
+                const email = event.target.description.value;
+               
+               
+                const obj={
+                   todo,
+                   description
+                }
+                // localStorage.setItem(obj.email, JSON.stringify(obj))
+                // showUserOnScreen(obj)
+                axios.post("https://crudcrud.com/api/4ef6e6c37dae4664aa0ae8869638e45d/toDo",obj)
+                .then((response)=>{
+                    showUserOnScreen(response.data)
+                    console.log(response)
+                })
+                .catch((err)=> {
+                    console.log(err)
+                    
+                })
+
+            }
+            window.addEventListener("DOMContentLoaded",() => {
+                axios.get("https://crudcrud.com/api/4ef6e6c37dae4664aa0ae8869638e45d/toDo")
+                .then((response) => {
+                    console.log(response)
+
+                    for(var i=0;i<response.data.length;i++){
+                        showUserOnScreen(response.data[i])
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+                axios.delete("https://crudcrud.com/api/4ef6e6c37dae4664aa0ae8869638e45d/toDo")
+                .then((res)=> {
+                    console.log(res)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+            })
+            function showUserOnScreen(obj){
+                const parentElem = document.getElementById('listOfitems')
+                const childElem = document.createElement('li')
+                childElem.textContent = obj.todo +'-'+ obj.description 
+               
+                
+                parentElem.appendChild(childElem)
+
+            }
+        </script>
+    </body>
+</html>
